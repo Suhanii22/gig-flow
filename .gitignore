@@ -1,16 +1,13 @@
-# Node modules
-node_modules/
+# Backend
+/backend/node_modules/
+/backend/build/
+/backend/dist/
+/backend/.env
+/backend/*.log
 
-# Build folders
-build/
-dist/
-
-# Environment variables
-.env
-
-# Logs
-*.log
-
-# OS generated files
-.DS_Store
-Thumbs.db
+# Frontend
+/frontend/node_modules/
+/frontend/build/
+/frontend/dist/
+/frontend/.env
+/frontend/*.log
