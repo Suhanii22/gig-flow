@@ -8,7 +8,7 @@ const API=axios.create({
     // credentials: "include", 
     withCredentials: true,
     headers:{
-        "content-Type":"application/json",
+        "Content-Type":"application/json",
     },
    
 });
