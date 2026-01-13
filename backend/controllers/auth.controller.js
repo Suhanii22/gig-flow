@@ -37,8 +37,8 @@ export const registerUser = async (req, res) => {
 
    res.cookie("token", token, {
   httpOnly: true,
-  secure: false,        // true only in production (https)
-  sameSite: "lax",
+  secure: true,        // true only in production (https)
+  sameSite: "None",
   maxAge: 5 * 24 * 60 * 60 * 1000,
 });
 
@@ -88,8 +88,8 @@ export const loginUser = async (req, res) => {
 
       res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // true in production
-      sameSite: "lax",
+      secure: true, // true in production
+      sameSite: "None",
       maxAge: 5 * 24 * 60 * 60 * 1000,
     });
 
