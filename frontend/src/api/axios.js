@@ -3,7 +3,7 @@ import axios from "axios";
 
 //creating instance of axios
 const API=axios.create({
-     baseURL: `${import.meta.env.REACT_APP_BACKEND}`, 
+     baseURL: import.meta.env.VITE_BACKEND_URL , 
     // credentials: "include", 
     withCredentials: true,
     headers:{
