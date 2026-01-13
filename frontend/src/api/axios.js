@@ -1,8 +1,9 @@
 import axios from "axios";
 
+
 //creating instance of axios
 const API=axios.create({
-     baseURL: "http://localhost:5000/api", 
+     baseURL: `${import.meta.env.REACT_APP_BACKEND}/api`, 
     // credentials: "include", 
     withCredentials: true,
     headers:{

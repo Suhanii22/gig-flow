@@ -12,7 +12,7 @@ export const SocketProvider = ({ children, currentUser }) => {
     if (!currentUser) return;
 
     // Connect to backend Socket.IO server
-    const socketInstance = socketIOClient("http://localhost:5000", {
+    const socketInstance = socketIOClient(`${import.meta.env.REACT_APP_BACKEND}`, {
       withCredentials: true,
     });
 

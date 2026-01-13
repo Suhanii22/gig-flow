@@ -24,11 +24,11 @@ app.use(cookieParser());
 
 
 
-const allowedOrigins = ["http://localhost:5173"]; // frontend URL
+const allowedOrigins = [process.env.FRONTEND ]; // frontend URL
 
 
 app.use(cors({
-  origin: 'http://localhost:5173',  // Exact origin of your frontend (not '*')
+  origin: process.env.FRONTEND ,  // Exact origin of your frontend (not '*')
   credentials: true,  // Allow credentials (cookies, auth headers, etc.)
   // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS for preflight
   // allowedHeaders: ['Content-Type', 'Authorization'],  // Adjust based on your headers
@@ -78,7 +78,7 @@ const server = http.createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND ,
     credentials: true,
   },
 });
