@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://gig-flow-urlc.onrender.com/api/:path*"
+    }
+  ]
+}
