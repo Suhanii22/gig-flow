@@ -4,7 +4,7 @@ import axios from "axios";
 //creating instance of axios
 const API=axios.create({
     //  baseURL: import.meta.env.VITE_BACKEND_URL , 
-    baseURL: " https://gig-flow-urlc.onrender.com",
+    baseURL: "https://gig-flow-urlc.onrender.com",
     // credentials: "include", 
     withCredentials: true,
     headers:{
