@@ -28,7 +28,7 @@ const allowedOrigins = [process.env.FRONTEND ]; // frontend URL
 
 
 app.use(cors({
-  origin: process.env.FRONTEND ,  // Exact origin of your frontend (not '*')
+  origin: "https://gig-flow-opal.vercel.app" ,  // Exact origin of your frontend (not '*')
   credentials: true,  // Allow credentials (cookies, auth headers, etc.)
   // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS for preflight
   // allowedHeaders: ['Content-Type', 'Authorization'],  // Adjust based on your headers
