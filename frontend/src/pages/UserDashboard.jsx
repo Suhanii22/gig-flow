@@ -28,10 +28,17 @@ const UserDashboard = () => {
 
 
 
-
   useEffect(() => {
+
+    const loadDataWithDelay = async () => {
+    // Wait for cookie to be ready
+    await new Promise(resolve => setTimeout(resolve, 200));
     loadData();
-  }, []);
+  };  loadDataWithDelay();
+}, []);
+
+  //   loadData();
+  // }, []);
 
 
   //   useEffect(() => {
