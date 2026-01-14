@@ -36,7 +36,7 @@ export const registerUser = async (req, res) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "None",
+    sameSite: "none",
     maxAge: 5 * 24 * 60 * 60 * 1000,
   });
 
@@ -77,21 +77,21 @@ export const loginUser = async (req, res) => {
     });
 
     //cookie
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "none",
-    //   maxAge: 5 * 24 * 60 * 60 * 1000,
-    //   path: '/'
-    // });
-
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 5 * 24 * 60 * 60 * 1000,
-      
+      path: '/'
     });
+
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: "lax",
+    //   maxAge: 5 * 24 * 60 * 60 * 1000,
+      
+    // });
 
     res.json({
       message: "User logged in successfully",
