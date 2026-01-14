@@ -11,6 +11,10 @@ import { LogoutUser } from "../api/auth.api";
 // import Notifications from "../components/Notifications.jsx"
 import socket from "../socket";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 const UserDashboard = () => {
   const [gigs, setGigs] = useState([]);
@@ -22,7 +26,7 @@ const UserDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
 
-
+const navigate=useNavigate();
 
 
 
