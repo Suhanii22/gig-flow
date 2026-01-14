@@ -110,3 +110,15 @@ export const loginUser = async (req, res) => {
     res.json({ message: "Server error" });
   }
 };
+
+
+
+//logout
+export const logoutUser = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+};

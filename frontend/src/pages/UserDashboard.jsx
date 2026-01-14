@@ -5,6 +5,7 @@ import CreateGig from "../components/CreateGig";
 import GigList from "../components/GigList";
 import { fetchCurrentUser } from "../api/other.api";
 import { searchGigs } from "../api/gig.api";
+import { LogoutUser } from "../api/auth.api";
 
 // import { SocketProvider } from '../context/SocketContext'
 // import Notifications from "../components/Notifications.jsx"
@@ -126,6 +127,19 @@ const UserDashboard = () => {
   };
 
 
+
+  const handleLogout = async () => {
+    
+     await LogoutUser();
+
+    // Clear frontend state
+      setCurrentUser(null);
+
+      // Redirect to login page (optional)
+      navigate("/login");
+  }
+
+
   return (
 <>
 
@@ -143,7 +157,12 @@ const UserDashboard = () => {
 
         <div className=" w-1/3">
 
-
+          <button
+      onClick={handleLogout}
+      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+    >
+      Logout
+    </button>
 
 
 
