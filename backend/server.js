@@ -55,15 +55,11 @@ app.get("/", (req, res) => {
 
 
 
-
-
-// Create HTTP server and attach Socket.io
+//Socket.IO 
 const server = http.createServer(app);
-
 
 export const io = new Server(server, {
   cors: {
-    // origin:"http://localhost:5173",
     origin: "https://gig-flow-opal.vercel.app",
     credentials: true,
   },
@@ -71,45 +67,16 @@ export const io = new Server(server, {
 
 
 
-
-io.use((socket, next) => {
-  const rawCookie = socket.request.headers.cookie;
-
-  if (!rawCookie) {
-    return next(new Error("Not authenticated"));
-  }
-
-  const cookies = cookie.parse(rawCookie);
-  const token = cookies.token;
-
-  if (!token) {
-    return next(new Error("Not authenticated"));
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    socket.user = { id: decoded.id }; // same shape as req.user
-    next();
-  } catch (err) {
-    next(new Error("Not authenticated"));
-  }
-});
-
-
-
 io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
+  console.log("✅ Client connected:", socket.id);
 
-
-
-  // Listen for "joinRoom" from frontend
-  const userId = socket.user.id;
-
-socket.join(`freelancer-${userId}`);
-console.log(`User ${userId} joined room freelancer-${userId}`);
+  socket.on("join", (userId) => {
+    socket.join(`user-${userId}`);
+    console.log(`User ${userId} joined`);
+  });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
+    console.log("❌ Client disconnected");
   });
 });
 

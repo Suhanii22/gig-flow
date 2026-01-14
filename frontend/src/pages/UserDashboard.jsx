@@ -6,10 +6,10 @@ import GigList from "../components/GigList";
 import { fetchCurrentUser } from "../api/other.api";
 import { searchGigs } from "../api/gig.api";
 
-import { SocketProvider } from '../context/SocketContext'
-import Notifications from "../components/Notifications.jsx"
-
-
+// import { SocketProvider } from '../context/SocketContext'
+// import Notifications from "../components/Notifications.jsx"
+import socket from "../socket";
+import toast, { Toaster } from "react-hot-toast";
 
 const UserDashboard = () => {
   const [gigs, setGigs] = useState([]);
@@ -42,6 +42,65 @@ const UserDashboard = () => {
 
   };
 
+
+
+
+  // ✅ Socket.IO Setup
+  useEffect(() => {
+    if (!currentUser) return;
+
+    // Connect socket
+    socket.connect();
+    
+    // Join user's room
+    socket.emit("join", currentUser._id || currentUser.id);
+    console.log("✅ Joined room for user:", currentUser._id || currentUser.id);
+
+    // Listen for hired notification
+    socket.on("hired", (data) => {
+      console.log("🎉 Notification received:", data);
+      
+      toast.success(
+        <div>
+          <strong>🎉 {data.message}</strong>
+          <p className="text-sm mt-1">Gig: {data.gigTitle}</p>
+        </div>,
+        {
+          duration: 6000,
+          position: "top-right",
+          style: {
+            background: '#10b981',
+            color: '#fff',
+            padding: '16px',
+            borderRadius: '10px',
+          },
+        }
+      );
+
+      // Optional: Reload gigs to update UI
+      loadData();
+    });
+
+    socket.on("connect", () => {
+      console.log("✅ Socket connected");
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("❌ Socket error:", err.message);
+    });
+
+    // Cleanup
+    return () => {
+      socket.off("hired");
+      socket.off("connect");
+      socket.off("connect_error");
+      socket.disconnect();
+    };
+  }, [currentUser]);
+
+
+
+
   const handlePlaceBid = (gigId) => {
     setCurrentGigId(gigId);
     setShowBidForm(true);
@@ -68,13 +127,9 @@ const UserDashboard = () => {
 
 
   return (
+<>
 
-
-
-    <SocketProvider currentUser={currentUser}>
-
-      <Notifications />
-
+    <Toaster />
 
 
       <div className="flex bg-[#efefef] min-h-[100vh]">
@@ -122,7 +177,8 @@ const UserDashboard = () => {
 
       </div>
 
-    </SocketProvider>
+
+</>
   );
 };
 

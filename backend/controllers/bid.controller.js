@@ -94,11 +94,10 @@ export const hireBid = async (req, res) => {
   await gig.save();
 
 
-  io.to(`freelancer-${bid.freelancerId}`).emit('hiredNotification', {
-    message: `You have been hired for "${gig.title}"!`,
-    gigId: gig._id,
-    gigTitle: gig.title
-  });
+io.to(`user-${bid.freelancerId}`).emit("hired", {
+      message: `You've been hired for "${gig.title}"!`,
+      gigTitle: gig.title,
+    });
 
   res.json({ message: "Freelancer hired successfully" });
 
