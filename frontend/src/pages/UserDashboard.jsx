@@ -159,7 +159,7 @@ const UserDashboard = () => {
 
           <button
       onClick={handleLogout}
-      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+      className="px-4 py-2 border-2 border-[#e44d4d] m-auto rounded hover:bg-red-400"
     >
       Logout
     </button>
