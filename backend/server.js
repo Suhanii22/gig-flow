@@ -9,55 +9,44 @@ import gigRoutes from "./routes/gig.routes.js";
 import bidRoutes from "./routes/bid.routes.js";
 import otherRoutes from "./routes/other.routes.js";
 
-
-import http from "http";       // needed to attach socket.io
+import http from "http";      
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
 
 
 dotenv.config();
 
 const app = express();
 
-// Middleware
+// Middlewares
 app.use(express.json());
 app.use(cookieParser());
 
 
 
-const allowedOrigins = [process.env.FRONTEND ]; // frontend URL
-
-
 app.use(cors({
-  origin: "https://gig-flow-opal.vercel.app" ,  // Exact origin of your frontend (not '*')
-  credentials: true,  // Allow credentials (cookies, auth headers, etc.)
-  // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Include OPTIONS for preflight
-  // allowedHeaders: ['Content-Type', 'Authorization'],  // Adjust based on your headers
+  // origin:"http://localhost:5173",
+  origin: "https://gig-flow-opal.vercel.app" , 
+  credentials: true,  
 }));
 
-// app.use(cors(corsOptions));
-
-// Connect to MongoDB Atlas
+// Connecting to MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Atlas connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 
 
-  // app.get("/api/gigs", (req, res) => {
-  //   res.json({ message: "Hello from backend!" });
-  // // res.send("This is a message from the server!");
-  //   });
-
-
 // Routes
 app.use("/api/auth", authRoutes);
-// app.use("api/gigs", gigRoutes);
-// console.log("2");
+
 app.use("/api/gigs", gigRoutes);
 
 app.use("/api/bids", bidRoutes);
 
 app.use("/api/other", otherRoutes);
+
 
 // Default route
 app.get("/", (req, res) => {
@@ -68,50 +57,61 @@ app.get("/", (req, res) => {
 
 
 
-
-
-
 // Create HTTP server and attach Socket.io
 const server = http.createServer(app);
 
 
-
 export const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND ,
+    // origin:"http://localhost:5173",
+    origin: "https://gig-flow-opal.vercel.app",
     credentials: true,
   },
 });
 
+
+
+
+io.use((socket, next) => {
+  const rawCookie = socket.request.headers.cookie;
+
+  if (!rawCookie) {
+    return next(new Error("Not authenticated"));
+  }
+
+  const cookies = cookie.parse(rawCookie);
+  const token = cookies.token;
+
+  if (!token) {
+    return next(new Error("Not authenticated"));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.user = { id: decoded.id }; // same shape as req.user
+    next();
+  } catch (err) {
+    next(new Error("Not authenticated"));
+  }
+});
+
+
+
 io.on("connection", (socket) => {
-   console.log("🟢 socket connected:", socket.id);
   console.log("New client connected:", socket.id);
 
 
 
-  // Listen for a simple test event
-  // socket.on("testMessage", (data) => {
-  //   console.log("📨 Received from frontend:", data, "from socket:", socket.id);
-
-  //   // Optional: send a response back
-  //   socket.emit("testResponse", { msg: "Hello from backend!" });
-  // });
-
-
-
   // Listen for "joinRoom" from frontend
-  socket.on("joinRoom", (userId) => {
-    socket.join(`freelancer-${userId}`);
-    console.log(`Socket ${socket.id} joined room freelancer-${userId}`);
-  });
+  const userId = socket.user.id;
+
+socket.join(`freelancer-${userId}`);
+console.log(`User ${userId} joined room freelancer-${userId}`);
 
   socket.on("disconnect", () => {
-    console.log("🔴 socket disconnected:", socket.id);
     console.log("Client disconnected:", socket.id);
   });
 });
-
-
 
 
 

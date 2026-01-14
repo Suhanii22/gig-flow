@@ -6,9 +6,11 @@ const Notifications = () => {
   if (notifications.length === 0) return null;
 
   return (
-    <div className="fixed top-4 right-4 bg-yellow-100 p-2 rounded shadow">
+    <div className="p-2">
       {notifications.map((n, idx) => (
-        <p key={idx}>📢 {n.message}</p>
+        <p key={idx}
+        mb-2 border border-gray-300 rounded px-3 py-2 text-sm text-gray-800 bg-white
+        >Notification : {n.message}</p>
       ))}
     </div>
   );

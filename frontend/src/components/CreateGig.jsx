@@ -25,7 +25,7 @@ const CreateGig = ({onSuccess}) => {
   };
 
   return (
-    <form  onSubmit={ handleSubmit} className="flex flex-col border p-2 m-3 items-center">
+    <form  onSubmit={ handleSubmit} className="flex flex-col p-2 m-3 items-center bg-[#ffffff]">
       <input
         name="title"
         value={formData.title}

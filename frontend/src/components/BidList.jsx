@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchBidsByGig } from "../api/bid.api";
 import { hireBid } from "../api/bid.api";
 
-const BidsList = ({ gigId ,isOwner}) => {
+const BidsList = ({ gigId, isOwner }) => {
   const [bids, setBids] = useState([]);
 
   useEffect(() => {
@@ -20,9 +20,9 @@ const BidsList = ({ gigId ,isOwner}) => {
   if (!bids.length) return <p>No bids yet</p>;
 
 
-    const handleHire = async (bidId) => {
+  const handleHire = async (bidId) => {
     try {
-        console.log("req sent from handle hire")
+      console.log("req sent from handle hire")
       const res = await hireBid(bidId); // store response from backend
       alert(res.data.message);          // show backend message
 
@@ -56,11 +56,11 @@ const BidsList = ({ gigId ,isOwner}) => {
 
 
 
-          
-          {/* ✅ HIRE BUTTON */}
+
+          {/*  HIRE BUTTON */}
           {isOwner && bid.status === "pending" && (
             <button
-              className="bg-green-600 text-white px-3 py-1 rounded"
+              className="border border-2 border-green-500  px-3 py-0 mt-3 rounded"
               onClick={() => handleHire(bid._id)}
             >
               Hire

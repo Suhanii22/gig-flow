@@ -8,61 +8,51 @@ dotenv.config();
 
 // REGISTERATION
 export const registerUser = async (req, res) => {
-    console.log("REGISTER HIT", req.body);
-
-  // const { name, email, password, role , services } = req.body;
-
- const { name, email, password } = req.body;
-
-  try {
-    // Checking if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
-
-    // Hashing password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Creating user
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      // services: role === "provider" ? services || [] : [],
-    });
-
-    // Generating token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "5d",
-    });
-
-   res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,        // true only in production (https)
-  sameSite: "None",
-  maxAge: 5 * 24 * 60 * 60 * 1000,
-});
-
-    // res.status(201).json({
-    //   user: { id: user._id, name: user.name, email: user.email },
-    //   token,
-    // });
 
 
-    res.status(201).json({
-  message: "User registered successfully",
-  user: {
-    id: user._id,
-    name: user.name,
-    email: user.email,
-  },
-  // token,
-});
+  const { name, email, password } = req.body;
 
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
+  // Checking if user exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) return res.json({ message: "User already exists" });
+
+  // Hashing password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Creating user
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  // Generating token
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "5d",
+  });
+
+  //cookie
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 5 * 24 * 60 * 60 * 1000,
+  });
+
+
+
+  res.json({
+    message: "User registered successfully",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    },
+
+  });
+
+
 };
 
 
@@ -75,39 +65,48 @@ export const loginUser = async (req, res) => {
   try {
     // Finding user
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user) return res.json({ message: "Invalid credentials" });
 
     // Checking password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) return res.json({ message: "Invalid credentials" });
 
     // Generating JWT
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "5d",
     });
 
-      res.cookie("token", token, {
+    //cookie
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "none",
+    //   maxAge: 5 * 24 * 60 * 60 * 1000,
+    //   path: '/'
+    // });
+
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // true in production
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       maxAge: 5 * 24 * 60 * 60 * 1000,
-       path: '/'
+      
     });
 
-     res.status(201).json({
-  message: "User logged in successfully",
-  user: {
-    id: user._id,
-    name: user.name,
-    email: user.email,
-  },
-  // token,
-});
+    res.json({
+      message: "User logged in successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+
+    });
 
 
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.json({ message: "Server error" });
   }
 };

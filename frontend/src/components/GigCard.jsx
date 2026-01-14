@@ -22,14 +22,13 @@ const Gig = ({ gig }) => {
          <h3>{gig.title}  title</h3>
          <p>{gig.description} desc</p>
          <p>Budget: ₹{gig.budget}</p>
-         <p>Status: {gig.status}</  p> 
+         <p>Status: {gig.status}</p> 
          {/* <button onClick={handleBid} disabled={gig.status !== "open"}> */}
    
          <button>
            Place Bid
          </button  >
-         {/* {isOwner && <p>(This is your gig)</p>} */}
-       </div>
+            </div>
 
 
 

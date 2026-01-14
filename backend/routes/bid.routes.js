@@ -4,13 +4,13 @@ import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// Submit a new bid (freelancer)
+// submiting a new bid (freelancer)
 router.post("/", verifyToken, createBid);
 
-// Get all bids for a specific gig (gig owner only)
+// Geting all bids for a specific gig (gig owner only)
 router.get("/:gigId", verifyToken, getBidsByGig);
 
-// // Hire a freelancer (update bid status, gig owner only)
+// // Hiring a freelancer (update bid status, gig owner only)
 router.patch("/:bidId/hire", verifyToken, hireBid);
 
 export default router;

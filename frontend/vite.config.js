@@ -7,13 +7,13 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss()
   ],
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'http://localhost:5000',  // Your backend URL
-  //       changeOrigin: true,  // Changes the origin of the host header to the target URL
-  //       secure: false,  // For HTTP (set to true for HTTPS in production)
-  //     },
-  //   },
-  // },
+   server: {
+    proxy: {
+      "/api": {
+        target: "https://gig-flow-urlc.onrender.com",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })

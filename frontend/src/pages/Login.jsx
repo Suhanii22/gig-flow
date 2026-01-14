@@ -3,7 +3,6 @@
 import React from 'react';
 import { useState } from 'react'
 import { loginUser } from '../api/auth.api';
-
 import { useNavigate } from "react-router-dom";
 
 
@@ -18,15 +17,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
-  
-    // const res =
-     await loginUser(formData)
-  
 
-  //  localStorage.setItem("token", res.data.token);
-
-
+    await loginUser(formData)
 
     //navigating to dashboard
     navigate("/userdashboard");
@@ -42,8 +34,8 @@ const Login = () => {
   return (
 
 
-    <form onSubmit={handleSubmit} className=' h-[60vh] flex flex-col justify-center  mt-[10%]  w-1/2 max-w-[400px]  p-6   bg-[#f0eeee] m-auto rounded-xl'>    
-     <span className='pl-3 text-2xl font-bold mb-8 '>SignIn</span>
+    <form onSubmit={handleSubmit} className=' h-[60vh] flex flex-col justify-center  mt-[10%]  w-1/2 max-w-[400px]  p-6   bg-[#f0eeee] m-auto rounded-xl'>
+      <span className='pl-3 text-2xl font-bold mb-8 '>SignIn</span>
       <input type="email" name='email' placeholder='Email' value={formData.email} onChange={handleChange} className=' p-2 m-2 bg-[#ffff] rounded-2xl ' />
       <input type="password" placeholder='Password' name='password' value={formData.password} onChange={handleChange} className=' p-2 m-2 bg-[#ffff] rounded-2xl ' />
 

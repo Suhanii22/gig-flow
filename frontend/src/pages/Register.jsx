@@ -23,17 +23,10 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-      // const res = 
-      await registerUser(formData);
+    await registerUser(formData);
 
-      //  localStorage.setItem("token", res.data.token);
-
-
-
-      // console.log(res.data);
-
-      //navigating to dashboard
-      navigate("/userdashboard")
+    //navigating to dashboard
+    navigate("/userdashboard")
 
   }
 
