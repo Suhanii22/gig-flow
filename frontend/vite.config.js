@@ -7,13 +7,13 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss()
   ],
-   server: {
-    proxy: {
-      "/api": {
-        target: "https://gig-flow-urlc.onrender.com",
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
+  //  server: {
+  //   // proxy: {
+  //   //   "/api": {
+  //   //     target: "https://gig-flow-urlc.onrender.com",
+  //   //     changeOrigin: true,
+  //   //     secure: false,
+  //   //   },
+  //   // },
+  // },
 })
