@@ -9,3 +9,7 @@ export const fetchBidsByGig = (gigId) => API.get(`/bids/${gigId}`);
 
 // Hire a freelancer (patch bid status)
 export const hireBid = (bidId) => API.patch(`/bids/${bidId}/hire`);
+
+
+export const fetchUserBids = () => API.get("/bids/my");
+

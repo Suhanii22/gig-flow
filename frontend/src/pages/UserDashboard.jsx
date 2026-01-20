@@ -7,10 +7,6 @@ import { fetchCurrentUser } from "../api/other.api";
 import { searchGigs } from "../api/gig.api";
 import { LogoutUser } from "../api/auth.api";
 
-// import { SocketProvider } from '../context/SocketContext'
-// import Notifications from "../components/Notifications.jsx"
-import socket from "../socket";
-import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 
@@ -25,83 +21,30 @@ const UserDashboard = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-
-const navigate=useNavigate();
-
+  const navigate = useNavigate();
 
 
-  useEffect(() => {
 
-    loadData();
-  }, []);
 
 
   const loadData = async () => {
 
-    const userRes = await fetchCurrentUser(); 
+    const userRes = await fetchCurrentUser();
     setCurrentUser(userRes.data);
 
     const res = await fetchAllGigs();
     setGigs(res.data);
-   
+
 
   };
 
-
-
-
-  // ✅ Socket.IO Setup
   useEffect(() => {
-    if (!currentUser) return;
 
-    // Connect socket
-    socket.connect();
-    
-    // Join user's room
-    socket.emit("join", currentUser._id || currentUser.id);
-    console.log("✅ Joined room for user:", currentUser._id || currentUser.id);
+    loadData();
 
-    // Listen for hired notification
-    socket.on("hired", (data) => {
-      console.log("🎉 Notification received:", data);
-      
-      toast.success(
-        <div>
-          <strong>🎉 {data.message}</strong>
-          <p className="text-sm mt-1">Gig: {data.gigTitle}</p>
-        </div>,
-        {
-          duration: 6000,
-          position: "top-right",
-          style: {
-            background: '#10b981',
-            color: '#fff',
-            padding: '16px',
-            borderRadius: '10px',
-          },
-        }
-      );
+  }, []);
 
-      // Optional: Reload gigs to update UI
-      loadData();
-    });
 
-    socket.on("connect", () => {
-      console.log("✅ Socket connected");
-    });
-
-    socket.on("connect_error", (err) => {
-      console.error("❌ Socket error:", err.message);
-    });
-
-    // Cleanup
-    return () => {
-      socket.off("hired");
-      socket.off("connect");
-      socket.off("connect_error");
-      socket.disconnect();
-    };
-  }, [currentUser]);
 
 
 
@@ -112,10 +55,6 @@ const navigate=useNavigate();
     setBidData({ price: "", message: "" });
   };
 
-  // const submitBid = async (e) => {
-  //   e.preventDefault();
-
-  // }
 
   const handleSearch = async (e) => {
     const value = e.target.value;
@@ -133,67 +72,84 @@ const navigate=useNavigate();
 
 
   const handleLogout = async () => {
-    
-     await LogoutUser();
+
+    await LogoutUser();
 
     // Clear frontend state
-      setCurrentUser(null);
+    setCurrentUser(null);
 
-      // Redirect to login page (optional)
-      navigate("/login");
+    // Redirect to login page (optional)
+    navigate("/login");
   }
 
 
   return (
-<>
-
-    <Toaster />
-
-
-      <div className="flex bg-[#efefef] min-h-[100vh]">
-
-       
-
-        <div className=" flex flex-col items-center p-4 w-2/3">
-          <div className="p-4 mb-5 text-2xl font-semibold bg-[#fdfbfb] shadow-2xl rounded-2xl">Available Gigs</div>
-          <GigList gigs={gigs} currentUser={currentUser} />
-        </div>
-
-        <div className=" w-1/3">
-
-          <button
-      onClick={handleLogout}
-      className="px-4 py-2 border-2 border-[#e44d4d] w-[85%] m-[20px] rounded hover:bg-red-400"
-    >
-      Logout
-    </button>
+    <>
 
 
 
-          <input
-            type="text"
-            placeholder="Search gigs by title"
-            value={searchTerm}
-            onChange={handleSearch}
-            className=" p-2 m-3 w-[90%] rounded-xl text-center bg-[#ffffff] shadow-xl"
-          />
 
 
-          <div className=" p-2 m-3  rounded-xl text-center bg-[#ffffff] shadow-xl">
-            <button onClick={() => setShowCreate(prev => !prev)}>
-              {showCreate ? "Cancel" : "Create Job"}
+      <div className="  bg-[#f5f4f4] min-h-[100vh]">
+
+
+
+        <div className=" flex  justify-between p-1  bg-[#fff] rounded-b-2xl border-b-2 border-gray-100">
+          <div className="p-3 mb-1 ml-5 text-3xl font-semibold  rounded-2xl ">Available Gigs</div>
+          {/* </div>
+
+        <div className=" w-1/3"> */}
+
+
+
+          <div className="flex ">
+
+            <input
+              type="text"
+              placeholder="Search gigs by title"
+              value={searchTerm}
+              onChange={handleSearch}
+              className="  rounded-3xl text-center py-2 my-3 outline-none focus:outline-none hover:bg-[#f8f8f8] focus:bg-[#f8f8f8]"
+            />
+
+
+
+
+            <div className=" px-4 pt-5  rounded-xl text-center hover:text-blue-600 ">
+              <button onClick={() => setShowCreate(prev => !prev)}>
+                {showCreate ? "Cancel" : "Create Job"}
+              </button>
+            </div>
+
+
+            {showCreate && (
+              <CreateGig
+                onSuccess={() => {
+                  setShowCreate(false);
+                  loadData();
+                }}
+              />
+            )}
+
+
+
+
+
+
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2    rounded  hover:text-red-600 "
+            >
+              Logout
             </button>
+
           </div>
 
 
-          {showCreate && (
-            <CreateGig
-              onSuccess={() => {
-                setShowCreate(false);
-                loadData(); // refresh list after submit
-              }}
-            />
-          )}
+        </div>
+        <div >
+          <GigList gigs={gigs} currentUser={currentUser} />
+
         </div>
 
 
@@ -201,7 +157,7 @@ const navigate=useNavigate();
       </div>
 
 
-</>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import Bid from "../models/Bid.js";
 import Gig from "../models/Gig.js";
-import { io } from "../server.js";
+// import { io } from "../server.js";
 
 
 
@@ -26,7 +26,7 @@ export const createBid = async (req, res) => {
 
     const bid = await Bid.create({
       gigId,
-      freelancerId: req.user.id,
+      freelancerId:req.user.id,
       price,
       message,
       status: "pending",
@@ -94,13 +94,21 @@ export const hireBid = async (req, res) => {
   await gig.save();
 
 
-io.to(`user-${bid.freelancerId}`).emit("hired", {
-      message: `You've been hired for "${gig.title}"!`,
-      gigTitle: gig.title,
-    });
+// io.to(`user-${bid.freelancerId}`).emit("hired", {
+//       message: `You've been hired for "${gig.title}"!`,
+//       gigTitle: gig.title,
+//     });
 
   res.json({ message: "Freelancer hired successfully" });
 
 };
 
 
+// GET /api/bids/my
+export const getMyBids = async (req, res) => {
+  console.log("im in getmybids")
+  console.log(req.user);
+  const userId = req.user.id; // logged in user
+  const bids = await Bid.find({ freelancerId: userId });
+  res.json(bids);
+};

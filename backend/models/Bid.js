@@ -8,7 +8,8 @@ const bidSchema = new mongoose.Schema(
       required: true
     },
     freelancerId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
+
       ref: "User",
       required: true
     },

@@ -9,8 +9,6 @@ import gigRoutes from "./routes/gig.routes.js";
 import bidRoutes from "./routes/bid.routes.js";
 import otherRoutes from "./routes/other.routes.js";
 
-import http from "http";      
-import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
 
@@ -55,37 +53,9 @@ app.get("/", (req, res) => {
 
 
 
-//Socket.IO 
-const server = http.createServer(app);
-
-export const io = new Server(server, {
-  cors: {
-    origin: "https://gig-flow-opal.vercel.app",
-    credentials: true,
-  },
-});
-
-
-
-io.on("connection", (socket) => {
-  console.log("✅ Client connected:", socket.id);
-
-  socket.on("join", (userId) => {
-    socket.join(`user-${userId}`);
-    console.log(`User ${userId} joined`);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("❌ Client disconnected");
-  });
-});
-
-
-
-
 // Start server
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
